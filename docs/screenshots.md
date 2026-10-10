@@ -54,7 +54,9 @@ It provides baseball context that a player-only prediction list would omit.
 The `score` and `hr_edge` columns are model scoring fields. They should not be
 read as calibrated home-run percentages or sportsbook expected returns.
 The visible rank gaps are preserved from the supplied export; this gallery
-does not rerank or reconstruct omitted rows.
+does not rerank or reconstruct omitted rows. As you can see the matchup model 
+ranked Teoscar Hernandez the best hitter-pitcher matchup of the day and he did 
+indeed hit a home run off of Lowder. 
 
 See [Model 3: Pitcher/Batter Matchup](model_cards/model_3_matchup_regression.md).
 
