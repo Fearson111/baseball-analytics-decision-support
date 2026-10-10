@@ -101,11 +101,22 @@ def table_html(frame: pd.DataFrame) -> str:
     return "".join(parts)
 
 
+def posting_fonts():
+    from PIL import ImageFont
+    for regular, bold, bold_index in (
+        ("/System/Library/Fonts/Menlo.ttc", "/System/Library/Fonts/Menlo.ttc", 1),
+        ("DejaVuSansMono.ttf", "DejaVuSansMono-Bold.ttf", 0),
+    ):
+        try:
+            return ImageFont.truetype(regular, 22), ImageFont.truetype(bold, 22, index=bold_index)
+        except OSError:
+            continue
+    return ImageFont.load_default(size=22), ImageFont.load_default(size=22)
+
+
 def png_bytes(frame: pd.DataFrame) -> bytes:
-    from PIL import Image, ImageDraw, ImageFont
-    regular = "/System/Library/Fonts/Menlo.ttc"
-    font = ImageFont.truetype(regular, 22)
-    bold = ImageFont.truetype(regular, 22, index=1)
+    from PIL import Image, ImageDraw
+    font, bold = posting_fonts()
     rows = [[display_value(v, c) for c, v in row.items()] for row in frame.to_dict("records")]
     widths = [int(max([bold.getlength(str(col))] + [font.getlength(row[i]) for row in rows])) + 28
               for i, col in enumerate(frame.columns)]
