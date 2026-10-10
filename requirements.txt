@@ -1,0 +1,15 @@
+# Dashboard, exports, research helpers, and the full test suite.
+# Pins reflect the inspected environment; openpyxl supplies Excel export.
+# The offline Eye CLI itself uses only the standard library.
+altair==6.0.0
+beautifulsoup4==4.14.3
+numpy==2.3.4
+openpyxl>=3.1,<4
+pandas==2.3.3
+Pillow==12.2.0
+requests==2.33.1
+scikit-learn==1.8.0
+scipy==1.17.1
+streamlit==1.56.0
+joblib>=1.3,<2
+threadpoolctl>=3.1,<4
