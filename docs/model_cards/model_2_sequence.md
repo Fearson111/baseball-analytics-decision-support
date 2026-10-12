@@ -1,20 +1,26 @@
-# Model 2: Rolling 14-Day Home Run Sequence Lab
+# Model 2: Sequence - Current Form and Home-Run Signals
 
-## What the Model Tries to Detect
+## What the Model Does
 
-The Sequence model asks: **Does the order and recent direction of a hitter's
-contact and plate-appearance results contain information about a home run in
-their next game?**
+The Sequence model analyzes a player's current form through signal processing
+of Statcast data and previous at-bat outcomes. It combines those signals into
+an estimated home-run probability for the day.
 
-Two hitters can have similar two-week totals but reach them differently. One
-might be producing harder airborne contact in recent days, while another's best
-contact occurred early in the window. The model represents that timing, looks
-for recurring ordered patterns, and combines those signals with an aggregate
-power baseline.
+It looks for changes in bat speed, attack angle, and airborne contact quality,
+including signs that a hitter's contact is improving before that improvement
+shows up in the box score. It also tracks recurring sequences of
+plate-appearance outcomes, called motifs, and whether those patterns are newly
+forming or carrying over from previous days.
 
-Its research hypothesis is that improving contact quality can sometimes precede
-visible home-run production. It does not assume a hitter is "due" simply because
-they have gone without a home run.
+The dashboard lets users explore those signals directly. Filters can narrow
+the player list to building bat speed, improving lift, stronger airborne
+contact, or contact quality ahead of recent results. Users can also filter by
+motif family, pattern age, recent six-step triggers, and hidden-production
+ramps, or exclude players with cooling signals.
+
+This makes the model both a daily home-run probability estimate and a way to
+investigate interesting players based on the specific changes behind their
+rankings.
 
 This description is based on inspection of the local Sequence Lab source on
 October 9, 2026. The upstream training code, data, and fitted artifacts remain

@@ -23,6 +23,13 @@ See the [financial model card](model_cards/financial_system.md) for probability
 estimation, budget allocation, and the separation of recorded wagers from
 simulated recommendations.
 
+## Financial Results
+
+The [financial walkthrough](financial_decision_system.md#results-in-the-dashboard)
+includes two October 12, 2026 screenshots: bets I selected and recorded
+(+11.98 units, 32.61% ROI) and simulated forward recommendations
+(+5.52 units, 17.90% ROI). The two histories are kept separate.
+
 ## Daily Signal Board
 
 ![September 16 daily signal export with players, odds, signal labels, and historical statistics](images/daily-signals-2026-09-16.png)

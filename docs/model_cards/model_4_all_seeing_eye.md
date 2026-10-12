@@ -1,9 +1,28 @@
 # Model 4: All-Seeing Eye
 
-## Purpose and Status
+## What the Model Does
 
-An implemented heuristic ranking system that prioritizes human review based on
-changes across model boards. It is not a separately trained home-run classifier.
+All-Seeing Eye brings together the GBM projections, positive-regression board,
+Sequence model, and matchup rankings to see how each player's signals are
+developing across the models.
+
+It compares current rankings with those from the previous three days, looking
+for upward movement, new entries, agreement, and disagreement. A player does
+not need to rank highly on every board to stand out; emerging support or a
+meaningful change can also raise their priority for review.
+
+Because the GBM tends to rank the strongest players near the top each day,
+All-Seeing Eye limits how much that consistently high rank alone influences its
+score. The goal is to surface a wider range of names with meaningful signals,
+giving the user interesting players to investigate rather than repeatedly
+showing the same top hitters.
+
+The output is a ranked board with explanations of what drove each player's
+score. Those results appear in the daily dashboard and contribute to the
+signals evaluated by the financial system.
+
+All-Seeing Eye uses scoring rules rather than a separately trained prediction
+model. Its score reflects review priority, not a home-run probability.
 
 ## Inputs and Outputs
 

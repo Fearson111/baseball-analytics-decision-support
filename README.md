@@ -1,95 +1,79 @@
 # Baseball Analytics & Decision Support
 
-An MLB home-run research project that turns several model outputs into an
-explainable review board, a daily dashboard, and an auditable decision history.
-Its central question is: **What changed today that deserves attention?**
+I built this project to bring several approaches to home-run prediction into one
+daily workflow. A gradient-boosted model produces player projections and a
+positive-regression board. A separate Sequence model examines 14 days of hitting
+data for changes in contact quality and recurring plate-appearance patterns,
+while a matchup model evaluates hitters against opposing pitchers.
 
-The All-Seeing Eye highlights rank acceleration, new entrants, emerging agreement,
-and disagreement. A separate financial research layer evaluates probability,
-price, uncertainty, and exposure.
+Those outputs feed into **All-Seeing Eye**, which compares the rankings, tracks
+movement between days, and highlights players whose signals are strengthening
+or disagreeing across models.
+
+A downstream **financial decision system** combines model probabilities,
+historical signal results, and available sportsbook odds to identify potential
+home-run bets. It estimates uncertainty, checks whether the price supports a bet,
+and sizes qualifying positions within bankroll and exposure limits.
+
+The dashboard brings the model boards, daily signals, financial decisions, and
+recorded results into one place.
 
 ## See the Application
 
 ![Financial portfolio showing four recorded positions, stakes, remaining budget, and modeled expected ROI](docs/images/financial-portfolio.png)
 
-The financial portfolio groups recorded positions by game and shows stake,
-remaining budget, and concentration. The displayed +43.09% is **modeled expected
-ROI**, not realized profit; the four positions shown are unsettled.
+The portfolio view shows recorded bets, stakes, remaining budget, and exposure
+by game. Expected ROI is a model estimate, not a realized return.
 
-[Explore all four screenshots](docs/screenshots.md) for the daily signal board,
-pitcher/batter matchups, and positive-regression rankings, with notes on how to
-interpret their scores and historical statistics.
+[View the daily signal, matchup, and positive-regression boards.](docs/screenshots.md)
 
-## Project Ownership and Development
+## Development
 
-This is my personal baseball analytics project, developed with AI coding
-assistance. I use this portfolio to present the baseball questions being explored,
-the implemented analysis workflow, and the evidence behind its limitations.
-AI assistance has contributed to implementation, testing, research analysis,
-and documentation; this is not a claim that I hand-wrote every module.
-
-The work represented here includes integrating model outputs, making rankings
-explainable, preserving pregame observations, and separating experimental signals
-from price-aware decisions and recorded outcomes. One research lesson is that
-strong historical pattern lift does not necessarily survive later evaluation.
-Another is that repeated forecasts for the same future game require careful
-handling when splitting training and evaluation data.
-
-The source and linked model cards make those decisions inspectable. This repository
-contains Model 4 and its downstream tools; the full upstream models are separate
-projects. Third-party libraries provide the underlying statistical, data, and UI
-components.
+I built this project gradually throughout the 2026 baseball season, adding and
+refining its models and tools piece by piece. AI coding assistance supported
+implementation, testing, research analysis, and documentation.
 
 ## Explore the Work
 
 | Guide | What you will find |
 | --- | --- |
-| [Application screenshots](docs/screenshots.md) | Four actual interface/export examples with interpretation notes |
-| [Model overview](docs/model_overview.md) | Architecture, scope, and code map |
-| [Daily workflow](docs/daily_workflow.md) | Runnable example and full local workflow |
-| [Data sources](docs/data_sources.md) | CSV contracts, provenance, and limitations |
-| [Financial decision system](docs/financial_decision_system.md) | Uncertainty, evaluation, and accounting |
-| [Model 1: GBM](docs/model_cards/model_1_gbm.md) | Projection and progression interfaces |
-| [Model 2: Sequence](docs/model_cards/model_2_sequence.md) | 14-day Statcast trends, ordered motifs, prediction, and scouting ranks |
-| [Model 3: Matchup](docs/model_cards/model_3_matchup_regression.md) | Pitcher/batter signals |
-| [Model 4: All-Seeing Eye](docs/model_cards/model_4_all_seeing_eye.md) | Review-priority scoring |
-| [The Closer](docs/model_cards/closer.md) | Candidate review after the Eye |
-| [Financial model card](docs/model_cards/financial_system.md) | Probability estimation, price checks, risk limits, and audited histories |
+| [Screenshots](docs/screenshots.md) | Dashboard and daily board examples |
+| [Project overview](docs/model_overview.md) | How the models connect |
+| [Running the project](docs/daily_workflow.md) | Setup, sample inputs, and daily workflow |
+| [Data sources](docs/data_sources.md) | Where the data comes from and how it is used |
+| [Financial system walkthrough](docs/financial_decision_system.md) | How a potential bet is evaluated, with a worked example |
+| [Model 1: GBM](docs/model_cards/model_1_gbm.md) | Home-run projections and positive regression |
+| [Model 2: Sequence](docs/model_cards/model_2_sequence.md) | Recent hitting trends and recurring plate-appearance patterns |
+| [Model 3: Matchup](docs/model_cards/model_3_matchup_regression.md) | Hitter rankings against opposing pitchers |
+| [Model 4: All-Seeing Eye](docs/model_cards/model_4_all_seeing_eye.md) | Changes and agreement across model rankings |
+| [The Closer](docs/model_cards/closer.md) | A closer review of the Eye's top candidates |
+| [Financial model](docs/model_cards/financial_system.md) | Probability estimates, bet selection, stake sizing, and results tracking |
 
 ## Run a Small Example
 
-From the repository root, using Python 3.13:
+Run the included sample with Python 3.13 from the project folder:
 
 ```bash
 python3 -m all_seeing_eye --today examples/today --yesterday examples/yesterday --out outputs/example
 ```
 
-This offline example needs only Python's standard library. It uses fictional
-players and synthetic ranks, with no credentials or downloads. Read
-`outputs/example/all_seeing_eye_reasoning.md` for explanations or inspect
-`outputs/example/all_seeing_eye_board.csv`.
+The sample uses fictional players to show how All-Seeing Eye compares rankings
+across two days. It runs offline with no additional packages.
 
-The example contrasts rising, consistently prominent, newly appearing, and
-mixed-support players. It demonstrates behavior, not predictive accuracy.
+Results are saved in `outputs/example/` as a ranked CSV and a Markdown file
+explaining each player's ranking.
 
-## Engineering and Analysis
+## What's Included
 
-- Integrates four ranked CSV boards with optional numeric and contextual fields.
-- Separates review priority from probability and price-based decisions.
-- Preserves snapshots and distinguishes retrospective research, forward
-  observations, and recorded wagers.
-- Handles missing quotes, lineup changes, and ambiguous game identities.
-- Includes unit and regression tests for scoring, history, accounting, and UI.
+This repository contains All-Seeing Eye, The Closer, the daily dashboard, the
+financial decision system, and their tests.
 
-Models 1-3 run in external projects whose training code and fitted artifacts are
-not included here. Their cards document the interfaces visible in this repository.
-The Eye and Closer are heuristic rankings, not calibrated home-run probabilities.
-This portfolio makes no independently verified predictive-performance or
-profitability claim.
+The GBM, Sequence, and matchup models run in separate projects. Their descriptions
+are included here, but their training code and fitted models are not.
 
 ## Development Setup
 
-The dashboard and complete test suite need additional packages:
+Install the packages and run the tests:
 
 ```bash
 python3 -m venv .venv
@@ -98,37 +82,23 @@ python -m pip install -r requirements.txt
 python -B -m unittest discover -s tests -q
 ```
 
-The GitHub workflow runs the tests and example on Ubuntu with Python 3.13.
-The full daily runner uses Unix file locking and configurable upstream paths;
-see the [workflow guide](docs/daily_workflow.md) for integration requirements.
+GitHub also runs the tests automatically. See
+[Running the project](docs/daily_workflow.md) for dashboard setup and connecting
+the upstream models. The full daily workflow supports macOS and Linux.
 
 ## Repository Layout
 
 ```text
-Model_4/
-  README.md
-  docs/
-    model_overview.md
-    daily_workflow.md
-    financial_decision_system.md
-    data_sources.md
-    model_cards/
-      model_1_gbm.md
-      model_2_sequence.md
-      model_3_matchup_regression.md
-      model_4_all_seeing_eye.md
-      closer.md
-      financial_system.md
-  all_seeing_eye/       # Source code
-  scripts/             # Launchers and maintenance scripts
-  tests/               # Unit and regression tests
-  examples/            # Small synthetic CSVs only
-  .github/workflows/tests.yml
-  .gitignore
-  requirements.txt
+all_seeing_eye/    Model 4, dashboard, and financial system
+docs/             Model descriptions, guides, and screenshots
+scripts/          Launchers and maintenance tools
+tests/            Automated tests
+examples/         Small sample CSVs
+requirements.txt  Python dependencies
 ```
 
-Existing detailed operating references remain in
-[Daily Baseball](DAILY_BASEBALL_README.md) and
-[Financial Decision System](FINANCIAL_DECISION_SYSTEM.md).
-Local archives, personal ledgers, and generated outputs are excluded from Git.
+Detailed operating notes: [Daily Baseball](DAILY_BASEBALL_README.md) ·
+[Financial Decision System](FINANCIAL_DECISION_SYSTEM.md)
+
+Daily archives, personal ledgers, and generated outputs are kept locally and are
+not included here.

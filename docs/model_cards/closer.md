@@ -1,22 +1,27 @@
 # The Closer
 
-## Purpose and Status
+## What It Does
 
-An implemented heuristic step that reranks Eye candidates for further home-run
-wager investigation. It does not train a probability model or execute wagers.
+The Closer takes a second look at All-Seeing Eye's leading candidates to narrow
+the list for further home-run bet research.
+
+It combines each player's Eye score with their GBM, positive-regression,
+Sequence, and matchup signals, then applies adjustments for available lineup
+information, price, and ranking movement.
+
+By default, it reviews the top 40 Eye candidates and returns up to 20 players,
+with a conviction score, reasons for their placement, and any remaining checks.
+
+The Closer helps decide which players deserve a closer look. The separate
+financial system evaluates whether the available odds justify a bet and how
+much to stake. The Closer's conviction score is a ranking measure, not a
+home-run probability.
 
 ## Inputs and Outputs
 
-Inputs are an Eye board and its four model CSVs. Defaults review the top 40 Eye
-rows and return up to 20 candidates. `closer_board.csv` and
-`closer_recommendations.md` include conviction, decision labels, reasons, and
-remaining checks.
-
-## Method
-
-Eye score and GBM, progression, sequence, and matchup strengths are combined
-with lineup, price, and movement adjustments. Conviction is bounded from 0 to 99;
-80 is not an 80% home-run probability.
+Inputs are an Eye board and its four model CSVs. Results are saved as
+`closer_board.csv` and `closer_recommendations.md`. Conviction scores range
+from 0 to 99.
 
 ## Evaluation and Limitations
 

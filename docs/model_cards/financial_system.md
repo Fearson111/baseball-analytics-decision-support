@@ -20,6 +20,119 @@ The implementation is in
 It does not execute wagers or change the upstream model rankings. The calculations
 below describe the software and its research assumptions, not recommended wagers.
 
+See [results in the dashboard](../financial_decision_system.md#results-in-the-dashboard)
+for screenshots of my selected bets and the system's simulated recommendations.
+
+## How Players Reach the Financial System
+
+Players enter through the daily signal board. Each signal is a specific
+combination of model rankings, patterns, and sportsbook prices. Examples include:
+
+| Signal | What qualifies a player |
+| --- | --- |
+| Mid-price edge | GBM top 25, odds +401 to +500, and a probability edge of 0-2.5 percentage points |
+| Price-and-edge signals | GBM top 25, odds +301 to +400 or +501 to +650, and an edge of 2.5-5 points |
+| Rank-and-edge signals | GBM ranks 1-5 with a 2.5-5-point edge, or ranks 11-25 with a 0-2.5-point edge |
+| Sequence confirmation | A high-lift five-step pattern, GBM top 10, and odds +301 to +400 |
+| Pitch-fit longshots | Odds +500 to +900, GBM ranks 40-130, and matchup rank 30 or better |
+| Sharper pitch-fit | Odds +500 to +800, GBM ranks 20-100, and matchup rank 10 or better |
+
+Some pitch-fit rules then select the best Eye rank, the two strongest price
+edges, or the two highest model probabilities. This gives players different
+ways to surface, including favorable matchups that are not near the top of
+the GBM.
+
+Matching a signal starts the evaluation; it does not automatically produce a
+bet. The historical ROI beside a signal describes its past results, not the
+expected return for today's player.
+
+## Turning Signals Into a Probability
+
+The default calculation combines the GBM probability, today's price, and earlier
+results from comparable signals.
+
+First, American odds become decimal odds, `d`. At +500, `d = 6.00`, so the
+break-even probability is `1 / 6 = 16.67%`.
+
+The starting probability averages that break-even rate with the GBM estimate.
+Historical players in the same odds bucket and within five percentage points
+of the GBM estimate can adjust that starting point. Peers without overlapping
+signal labels inform the prior; players sharing an exact signal label supply
+the evidence used to update it.
+
+Multiple labels for the same historical player-day count only once. The system
+also reduces the weight of observations clustered on the same dates:
+
+```text
+effective sample = min(matched player-days, 2 * distinct dates, 100)
+```
+
+With starting probability `p0`, historical hit rate `r`, and default prior
+strength 30:
+
+```text
+alpha = 30 * p0       + effective sample * r
+beta  = 30 * (1 - p0) + effective sample * (1 - r)
+estimated HR probability = alpha / (alpha + beta)
+```
+
+This Beta-distribution calculation keeps a small, unusually successful sample
+from completely overriding the starting estimate. It also produces an uncertainty
+interval and the estimated probability that the player's true HR chance exceeds
+break-even.
+
+## Comparing Probability With Price
+
+For estimated HR probability `p` and decimal odds `d`:
+
+```text
+Probability edge = 100 * (p - 1/d) percentage points
+Expected profit per unit = p * d - 1
+```
+
+For example, a 23.6% estimate at +500 gives a **6.93-point edge** and
+**0.416 units of expected profit per unit risked**. Those are modeled
+expectations, not guaranteed returns.
+
+The system separately calculates its confidence that the edge is positive.
+A 90% probability of positive expected value does **not** mean a 90% chance
+of hitting a home run.
+
+## Deciding Whether to Bet
+
+Default requirements include positive expected value, at least a 1.5-point
+edge, 90% confidence in positive value, an uncertainty interval no wider than
+20 points, and at least 25 matched historical player-days. The historical hit
+rate must also exceed today's break-even rate.
+
+The player must have a usable base probability, recognized signals, a confirmed
+lineup, and a valid pregame quote no older than 60 minutes. A positive estimate
+can still receive **WATCH** when evidence or conditions are insufficient.
+
+## Sizing and Tracking Positions
+
+The system calculates a quarter-Kelly stake ceiling:
+
+```text
+Full Kelly fraction = max(0, (p * d - 1) / (d - 1))
+Stake ceiling = bankroll * Full Kelly fraction * 0.25
+```
+
+Eligible players share available capacity subject to individual ceilings and
+limits by player, day, game, team, and signal/model family. Defaults include a
+100-unit bankroll, a one-unit player cap, and a five-unit daily budget; saved
+settings can differ.
+
+Recorded profit uses the actual stake and odds. **ROI is total settled profit
+divided by total settled stakes**, while drawdown measures the decline from a
+previous bankroll peak. Simulated recommendations and personally recorded bets
+remain separate.
+
+The optional market-offset regression is a separate research method, disabled
+for decisions by default. It learns adjustments to market probabilities and
+must beat the market benchmark on chronological held-out Brier score before
+it can replace the default calculation.
+
 ## Where It Fits
 
 ```mermaid

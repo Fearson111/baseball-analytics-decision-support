@@ -10,6 +10,32 @@ evidence, then whether the portfolio has capacity for that exposure. The
 the matching rules, probability formulas, optional regression, eligibility gates,
 allocation algorithm, and recordkeeping.
 
+## Results in the Dashboard
+
+The financial dashboard tracks simulated recommendations separately from bets
+I chose and recorded. These screenshots were taken on October 12, 2026.
+
+### Bets I Selected
+
+These are bets I selected and logged, not an automatically placed model portfolio.
+The dashboard shows 48 bets, 11 home runs, and 36.75 units risked, with a profit
+of **11.98 units** and **32.61% ROI**. Displayed maximum drawdown is 10.06%.
+
+![Recorded wager history showing 48 bets, 11.98 units profit, and 32.61 percent ROI](images/financial-history-recorded-2026-10-12.png)
+
+### Simulated Recommendations
+
+This view tracks the system's forward recommendations as simulated bets,
+separately from my recorded wagers. It shows 32 bets, 7 home runs, and 30.83 units
+risked, with a simulated profit of **5.52 units** and **17.90% ROI**.
+Displayed maximum drawdown is 11.22%.
+
+![Simulated recommendation history showing 32 bets, 5.52 units profit, and 17.90 percent ROI](images/financial-history-simulated-2026-10-12.png)
+
+These are small samples of dashboard results, not proof of long-term profitability.
+The screenshots do not show the start and end dates of the tracked bets. The
+20-bet setting controls the rolling ROI window, not the totals reported above.
+
 ## Worked Example: Positive EV but WATCH
 
 This is a synthetic calculation using the default code settings, not a real
@@ -109,8 +135,8 @@ ROI and calibration. Grading does not create a wager.
 
 Historical signal discovery remains retrospective even when later analysis uses
 date-separated validation. Posterior confidence is conditional on assumptions.
-No performance number is asserted here: the private ledger and source archive
-are not part of the public example.
+The screenshots above report dashboard totals; the private ledger and source
+archive are not included for independent reproduction.
 
 A public evaluation should disclose dates, sample sizes, selection rules,
 coverage, calibration, baselines, and simulated versus actual accounting.

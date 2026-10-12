@@ -1,10 +1,20 @@
 # Model 3: Pitcher/Batter Matchup
 
-## Role and Naming
+## What the Model Does
 
-An external project supplies matchup rankings. The documentation filename includes
-`regression` to match the portfolio layout, but the positive-regression board
-`gbm_progression_top80.csv` belongs to Model 1, not Model 3.
+The matchup model evaluates hitters against the pitcher they are expected to
+face that day. It looks at how a hitter's strengths fit the opposing pitcher's
+pitch characteristics and weaknesses, incorporating fixed park factors, pitcher
+vulnerability, handedness, and batter power.
+
+The goal is not simply to find the best overall matchup, but to identify
+situations where those factors create an opportunity for a home run.
+
+Its board provides another perspective alongside the GBM's projections and the
+Sequence model's current-form signals. Those rankings feed into All-Seeing Eye
+to help identify players with support across the models.
+
+The matchup score is a ranking measure, not a home-run probability.
 
 ## Inputs and Outputs
 

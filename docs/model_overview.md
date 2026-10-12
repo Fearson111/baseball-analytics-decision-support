@@ -1,71 +1,65 @@
 # Model Overview
 
-Model 4 combines existing baseball model rankings to prioritize human review.
-It supports investigation through explanations, historical tracking, and a
-daily Streamlit dashboard.
+Each day, the GBM produces home-run projections and positive-regression rankings,
+the Sequence model identifies recent hitting patterns, and the matchup model
+ranks hitters against opposing pitchers.
 
-## Architecture
+All-Seeing Eye compares those four boards with previous days' results to highlight
+changes across the models. The daily dashboard combines their outputs with
+lineups and sportsbook odds, then passes the available signals to the financial
+system for bet evaluation and stake sizing.
+
+## How the Models Connect
 
 ```mermaid
 flowchart TD
-    A[Model 1: GBM and progression] --> D[Four CSV boards]
-    B[Model 2: Sequence] --> D
-    C[Model 3: Pitcher/batter] --> D
-    D --> E[Model 4: All-Seeing Eye]
-    H[Prior dated boards] --> E
+    A[GBM projections and positive regression] --> D[Four daily model boards]
+    B[Sequence model] --> D
+    C[Pitcher-batter matchup model] --> D
+    D --> E[All-Seeing Eye]
+    H[Previous days' rankings] --> E
     E --> F[The Closer]
     D --> F
-    D --> G[Daily hub: signals and exports]
+    D --> G[Daily dashboard and signals]
     E --> G
-    M[Lineups and market observations] --> G
-    G --> I[Financial research layer]
-    J[Earlier outcomes] --> I
-    I --> K[Separate recommendation and wager histories]
+    M[Lineups and sportsbook odds] --> G
+    G --> I[Financial decision system]
+    J[Historical signal results] --> I
+    I --> K[Bet recommendations and stake sizes]
+    I --> L[Recorded bets and results]
 ```
 
-This is a conceptual flow. The standalone Eye CLI runs independently of the hub,
-network feeds, and financial layer. The Closer is available through the menu.
+All-Seeing Eye can also run directly from CSV inputs. The Closer is a separate
+review step available through the project menu.
 
 ## Code Map
 
-| Component | Implementation | Purpose |
+| Component | Files | What it does |
 | --- | --- | --- |
-| Input contract | [boards.py](../all_seeing_eye/boards.py), [io.py](../all_seeing_eye/io.py) | Load boards and join players/history |
-| Eye ranking | [scoring.py](../all_seeing_eye/scoring.py) | Movement, agreement, disagreement, persistence |
-| CLI | [cli.py](../all_seeing_eye/cli.py) | CSV and Markdown output |
-| Closer | [closer.py](../all_seeing_eye/closer.py) | Candidate review |
-| Integration | [runner.py](../all_seeing_eye/daily_hub/runner.py) | External models, snapshots, refreshes |
-| Dashboard | [app.py](../all_seeing_eye/daily_hub/app.py) | Daily analysis |
-| Financial layer | [financial_system](../all_seeing_eye/financial_system/) | Uncertainty, eligibility, accounting |
-| Verification | [tests](../tests/) | Unit and regression checks |
+| Model inputs | [boards.py](../all_seeing_eye/boards.py), [io.py](../all_seeing_eye/io.py) | Reads the model boards and matches players across them |
+| All-Seeing Eye | [scoring.py](../all_seeing_eye/scoring.py) | Scores changes, agreement, and disagreement across models |
+| Command-line runner | [cli.py](../all_seeing_eye/cli.py) | Runs the Eye and saves rankings and explanations |
+| The Closer | [closer.py](../all_seeing_eye/closer.py) | Reviews the Eye's top candidates |
+| Daily workflow | [runner.py](../all_seeing_eye/daily_hub/runner.py) | Runs the models, refreshes data, and saves daily outputs |
+| Dashboard | [app.py](../all_seeing_eye/daily_hub/app.py) | Displays boards, signals, and results |
+| Financial system | [financial_system](../all_seeing_eye/financial_system/) | Evaluates bets, sizes stakes, and tracks results |
+| Tests | [tests](../tests/) | Checks calculations and application behavior |
 
-The CLI imports the package's `all_seeing_eye/scoring.py`. The existing root-level
-`scoring.py` is not its entry point.
+## Reading the Scores
 
-## Scope and Interpretation
+All-Seeing Eye and The Closer produce ranking scores, not home-run probabilities.
+The Sequence board also includes scouting adjustments, explained in its
+[model description](model_cards/model_2_sequence.md).
 
-Models 1-3 are external projects. Their full training pipelines and fitted
-artifacts are not included here. The expanded [Sequence model card](model_cards/model_2_sequence.md)
-also documents its locally inspected upstream implementation: 14-day Statcast
-features, ordered plate-appearance motifs, a gradient-boosted estimator, and
-subsequent scouting adjustments. Its exported rank reflects that adjusted score,
-not simply the estimator's probability.
-Model 1 supplies both the GBM and positive-regression/progression board.
-That regression board is distinct from Model 3's pitcher/batter board.
-
-Eye scores indicate review priority; Closer scores indicate heuristic conviction.
-Neither is a home-run probability. Agreement does not establish independence:
-multiple boards can share underlying information.
+Agreement across models can strengthen a player's case, but the models may share
+data and signals. Their agreement should not be treated as independent
+confirmation.
 
 ## Evaluation Status
 
-The public example uses synthetic data. Tests establish software behavior, not
-forecasting skill. Private historical archives are not distributed here.
+Historical results help identify patterns worth investigating, but those patterns
+need to be tested on later games that weren't used to select them.
 
-A reproducible performance study should freeze pregame forecasts, identify
-player-game observations, separate training/evaluation dates, disclose sample
-sizes and missing coverage, and compare appropriate baselines. Probability
-models need calibration and scoring-rule evaluation; ranking systems need
-ranking-based evaluation. Rules discovered from historical results need a later,
-untouched evaluation period. These are research requirements, not completed
-performance claims.
+The model descriptions explain the evaluations completed so far and their
+limitations. The included sample demonstrates the workflow with fictional
+players; it is not a performance test.
